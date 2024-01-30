@@ -46,11 +46,12 @@ string ::= "\"" <any symbol except a double quote>  "\""
 
 array ::= "[" elements "]"
 
-#todo: fix
+#todo: fixed yesterday, need to check
 elements :: = expression | expression "," elements
 
 array_access ::= variable_name "[" expression "]"        
 
+#todo: fixed yesterday, need to check
 operator ::= "+" | "-" | "*" | "/" | "%" | "=" | "==" | "!=" | "<" | ">" | "<=" | ">=" | "and" | "or"
 
 expression ::= 
@@ -189,6 +190,7 @@ p3 = """
 
 # print(tokenize(p))
 
+#todo: need to complete function for tests: p1, p2
 def parse_expression(tokens, pos, instructors):
     result = []
 
@@ -226,6 +228,8 @@ print(parsed_expression)
 instructors = []
 parse_expression(tokenize(p), 0, instructors)
 #print(instructors)
+
+#result func parse_expression if use test 'p'
 [
     {
         "opcode": "ld",
