@@ -10,9 +10,12 @@ c = 'x'
 c = input()
 d = [11, 22, 33]
 e = ['a', 'b', 'c']
-len(d)
 print(e[0])
 x = (2 + 2) - 3 * 4 / 4
+e[0] = 3
+var i
+i = 2
+e[i + 1] = 4
 if (x < 10 and x >= 0 or x == 5 and x != 6) {
     x = x + 1
     y = x + 1
@@ -25,6 +28,53 @@ while (i < 0) {
 }
 """
 
+"""
+letter ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+       | "x" | "y" | "z" ;
+
+digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+variable_name ::= letter (letter | digit)*
+
+number ::= ( digit ) +
+
+char ::= "'" <any symbol> "'"
+
+string ::= "\"" <any symbol except a double quote>  "\""
+
+array ::= "[" elements "]"
+
+#todo: fix
+elements :: = expression | expression "," elements
+
+array_access ::= variable_name "[" expression "]"        
+
+operator ::= "+" | "-" | "*" | "/" | "%" | "=" | "==" | "!=" | "<" | ">" | "<=" | ">=" | "and" | "or"
+
+expression ::= 
+    number |
+    char |
+    string |
+    array |
+    variable_name |
+    array_access |
+    expression operator expression |
+    "(" expression ")" |
+    "input" "(" ")" |
+    "print" "(" experession ")"
+    
+statement ::= 
+    "var" variable_name |
+    "if" "(" expression ")" "{" ( statement ) * "}" 
+    ( "else" "{" ( statement ) * "}" ) ? |
+    "while" "(" expression ")" "{" ( statement ) * "}"
+    variable_name "=" expression |
+    array_access "=" expression
+
+program ::= ( statement ) +
+"""
 # x = (1 + 2) - 3 * 4 / 5
 # 
 # 1 2 +  3 4 * 5 /   -
@@ -56,6 +106,9 @@ while (i < 0) {
 # 
 # ADD operand      +
 # SUB operand      +
+# MUL operand      *
+# DIV operand      /
+# MOD operand      %
 # AND operand      ?
 # OR operand       ?
 # SHL operand      ?
@@ -116,10 +169,113 @@ def tokenize(s):
     
     return result
 
-p = """
+#not worked
+p1 = """
 1 - 2 + 3 * (4 - 5) + 6
 """
-print(tokenize(p))
+#work
+p = """
+1 + 2 - 3 
+"""
+#not worked
+p2 = """
+x + y - x
+"""
+#work
+p3 = """
+1 + 2 - 3 var a
+"""  #    ^
+#         +- stop here
+
+# print(tokenize(p))
+
+def parse_expression(tokens, pos, instructors):
+    result = []
+
+    while pos < len(tokens):
+        token = tokens[pos]
+
+        if token.isdigit():
+            result.append({"opcode": "ld", "arg_type": "immediate", "arg": int(token)})
+        elif token == "+":
+            if pos + 1 < len(tokens) and tokens[pos + 1].isdigit():
+                result.append({"opcode": "add", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
+                pos += 1
+            else:
+                raise ValueError("Invalid expression")
+        elif token == "-":
+            if pos + 1 < len(tokens) and tokens[pos + 1].isdigit():
+                result.append({"opcode": "sub", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
+                pos += 1
+            else:
+                raise ValueError("Invalid expression")
+        elif token.startswith("v"):
+            break
+        else:
+            raise ValueError("Invalid token: {}".format(token))
+
+        pos += 1
+
+    return result
+
+
+parsed_expression = parse_expression(tokenize(p), 0, [])
+print(parsed_expression)
+
+
+instructors = []
+parse_expression(tokenize(p), 0, instructors)
+#print(instructors)
+[
+    {
+        "opcode": "ld",
+        "arg_type": "immediate",
+        "arg": 1
+    },
+    {
+        "opcode": "add",
+        "arg_type": "immediate",
+        "arg": 2    
+    },
+    {
+        "opcode": "sub",
+        "arg_type": "immediate",
+        "arg": 3
+    },
+]
+
+# def parse_statement(tokens, pos, instructors):
+#     parse_expression(tokens, pos, instructors)
+#     # if tokens[pos] == "var":
+#     #     ...
+#     # elif tokens[pos] == "if":
+# 
+# def parse_program(tokens):
+#     instructors = []
+#     pos = 0
+#     while pos < len(tokens):
+#         pos = parse_statement(tokens, pos, instructors)
+#     return instructors
+# 
+# print(parse_program(tokenize(p)))
+
+#todo: rewirte to our simplified js 
+def sum_even_fibonacci(limit):
+    sum_even = 0
+    prev = 1
+    current = 2
+    
+    while current <= limit:
+        if current % 2 == 0:
+            sum_even += current
+            
+        prev, current = current, prev + current
+    
+    # print(
+    return sum_even
+
+# print(sum_even_fibonacci(4_000_000_000)) # числа 2 и 8 (1, 2, 3, 5, 8)
+    
 # should be:
 # ['var', 'a', 'a', '=', '"hello world"', 'print', 
 # '(', 'a', ')', 'if', '(', 'c', '>', '5', ')', 
