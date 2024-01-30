@@ -32,7 +32,7 @@ while (i < 0) {
 letter ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i"
        | "j" | "k" | "l" | "m" | "n" | "o" | "p"
        | "q" | "r" | "s" | "t" | "u" | "v" | "w"
-       | "x" | "y" | "z" ;
+       | "x" | "y" | "z" 
 
 digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
@@ -46,13 +46,11 @@ string ::= "\"" <any symbol except a double quote>  "\""
 
 array ::= "[" elements "]"
 
-#todo: fixed yesterday, need to check
 elements :: = expression | expression "," elements
 
 array_access ::= variable_name "[" expression "]"        
 
-#todo: fixed yesterday, need to check
-operator ::= "+" | "-" | "*" | "/" | "%" | "=" | "==" | "!=" | "<" | ">" | "<=" | ">=" | "and" | "or"
+operator ::= "+" | "-" | "*" | "/" | "%" | "==" | "!=" | "<" | ">" | "<=" | ">=" | "and" | "or"
 
 expression ::= 
     number |
@@ -70,7 +68,7 @@ statement ::=
     "var" variable_name |
     "if" "(" expression ")" "{" ( statement ) * "}" 
     ( "else" "{" ( statement ) * "}" ) ? |
-    "while" "(" expression ")" "{" ( statement ) * "}"
+    "while" "(" expression ")" "{" ( statement ) * "}" |
     variable_name "=" expression |
     array_access "=" expression
 
@@ -185,49 +183,79 @@ x + y - x
 #work
 p3 = """
 1 + 2 - 3 var a
-"""  #    ^
-#         +- stop here
+""" 
+p4 = """
+1 + 2 + 3 * 4
+""" 
 
 # print(tokenize(p))
 
+# ['x', 'y', 'z']
+# 'y'
+# 1 * 4  ->  4
+
+def is_name(s):
+    ...    
+    
+    
+print(is_name('x')) # t    
+print(is_name('var')) # f
+print(is_name('abc123')) # t
+   
 #todo: need to complete function for tests: p1, p2
-def parse_expression(tokens, pos, instructors):
-    result = []
+def parse_expression(tokens, pos, program):
+    instructions = program["instructions"]
+    variables = program["variables"]
 
     while pos < len(tokens):
         token = tokens[pos]
+        
+        if pos + 1 < len(tokens):
+            next_token = tokens[pos + 1]
+        else:
+            next_token = None
 
         if token.isdigit():
-            result.append({"opcode": "ld", "arg_type": "immediate", "arg": int(token)})
+            instructions.append({"opcode": "ld", "arg_type": "immediate", "arg": int(token)})
+        #todo: except `var`, `if`, `while`, `input`, `print`
+        elif token.isalpha() and token.islower():
+            instructions.append({"opcode": "ld", "arg_type": "address", "arg": variables[token]})
+                
+                                    
         elif token == "+":
             if pos + 1 < len(tokens) and tokens[pos + 1].isdigit():
-                result.append({"opcode": "add", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
+                instructions.append({"opcode": "add", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
                 pos += 1
+            #todo: except `var`, `if`
+            if pos + 1 < len(tokens) and tokens[pos + 1].isalpha() and tokens[pos + 1].islower():
+                instructions.append({"opcode": "add", "arg_type": "address", "arg": variables[tokens[pos + 1]]})
             else:
                 raise ValueError("Invalid expression")
         elif token == "-":
             if pos + 1 < len(tokens) and tokens[pos + 1].isdigit():
-                result.append({"opcode": "sub", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
+                instructions.append({"opcode": "sub", "arg_type": "immediate", "arg": int(tokens[pos + 1])})
                 pos += 1
             else:
                 raise ValueError("Invalid expression")
-        elif token.startswith("v"):
-            break
         else:
-            raise ValueError("Invalid token: {}".format(token))
+            break
 
         pos += 1
 
-    return result
+    return pos
 
 
-parsed_expression = parse_expression(tokenize(p), 0, [])
-print(parsed_expression)
+# parsed_expression = parse_expression(tokenize(p4), 0, [])
+# print(parsed_expression)
 
-
-instructors = []
-parse_expression(tokenize(p), 0, instructors)
-#print(instructors)
+program = {
+    'instructions': [],
+    'variables': {"x": 0, "y": 4},
+    "data_size": 0,
+    ###
+}
+parse_expression(tokenize("x + y"), 0, program)
+print(program)
 
 #result func parse_expression if use test 'p'
 [
