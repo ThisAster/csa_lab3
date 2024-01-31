@@ -195,12 +195,25 @@ p4 = """
 # 1 * 4  ->  4
 
 def is_name(s):
-    ...    
+    if not isinstance(s, str) or not s.isidentifier() or not s.islower():
+        return False
+    keywords = {'false', 'none', 'true', 'and', 'as', 'assert', 'async', 'await',
+                'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except',
+                'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda',
+                'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with',
+                'yield', 'var'}
+    return s.lower() not in keywords    
     
     
-print(is_name('x')) # t    
-print(is_name('var')) # f
-print(is_name('abc123')) # t
+print( is_name('x') )  # true
+print( is_name('x2') )  # true
+print( is_name('abc') )  # true
+print( is_name('var') )  # false
+print( is_name('15') )  # false
+print( is_name('ABC') )  # false 
+print( is_name('') )  # false
+print( is_name(None) )  # false
+
    
 #todo: need to complete function for tests: p1, p2
 def parse_expression(tokens, pos, program):
