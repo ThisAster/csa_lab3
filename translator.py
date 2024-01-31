@@ -194,6 +194,12 @@ p4 = """
 # 'y'
 # 1 * 4  ->  4
 
+def syntax_error():
+    print("Syntax error: Invalid syntax.")
+    exit(1)
+
+# syntax_error()
+
 def is_name(s):
     if not isinstance(s, str) or not s.isidentifier() or not s.islower():
         return False
@@ -205,14 +211,36 @@ def is_name(s):
     return s.lower() not in keywords    
     
     
-print( is_name('x') )  # true
-print( is_name('x2') )  # true
-print( is_name('abc') )  # true
-print( is_name('var') )  # false
-print( is_name('15') )  # false
-print( is_name('ABC') )  # false 
-print( is_name('') )  # false
-print( is_name(None) )  # false
+# print( is_name('x') )  # true
+# print( is_name('x2') )  # true
+# print( is_name('abc') )  # true
+# print( is_name('var') )  # false
+# print( is_name('15') )  # false
+# print( is_name('ABC') )  # false 
+# print( is_name('') )  # false
+# print( is_name(None) )  # false
+
+def is_op(s):
+    if not isinstance(s, str):
+        return False
+    operators = {'<', '<=', '==', '>=', '>', '!=', '+', '-', '*', '/', '%'}
+    return s in operators
+
+print(is_op('<'))     # True
+print(is_op('<='))    # True
+print(is_op('=='))    # True
+print(is_op('>='))    # True
+print(is_op('>'))     # True
+print(is_op('!='))    # True
+print(is_op('+'))     # True
+print(is_op('-'))     # True
+print(is_op('*'))     # True
+print(is_op('/'))     # True
+print(is_op('%'))     # True
+print(is_op('x'))     # False
+print(is_op('123'))   # False
+print(is_op('var'))   # False
+print(is_op(None))    # False
 
    
 #todo: need to complete function for tests: p1, p2
