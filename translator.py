@@ -208,7 +208,7 @@ def is_name(s):
                 'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is', 'lambda',
                 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try', 'while', 'with',
                 'yield', 'var'}
-    return s.lower() not in keywords    
+    return s not in keywords    
     
     
 # print( is_name('x') )  # true
@@ -226,21 +226,34 @@ def is_op(s):
     operators = {'<', '<=', '==', '>=', '>', '!=', '+', '-', '*', '/', '%'}
     return s in operators
 
-print(is_op('<'))     # True
-print(is_op('<='))    # True
-print(is_op('=='))    # True
-print(is_op('>='))    # True
-print(is_op('>'))     # True
-print(is_op('!='))    # True
-print(is_op('+'))     # True
-print(is_op('-'))     # True
-print(is_op('*'))     # True
-print(is_op('/'))     # True
-print(is_op('%'))     # True
-print(is_op('x'))     # False
-print(is_op('123'))   # False
-print(is_op('var'))   # False
-print(is_op(None))    # False
+# print(is_op('<'))     # True
+# print(is_op('<='))    # True
+# print(is_op('=='))    # True
+# print(is_op('>='))    # True
+# print(is_op('>'))     # True
+# print(is_op('!='))    # True
+# print(is_op('+'))     # True
+# print(is_op('-'))     # True
+# print(is_op('*'))     # True
+# print(is_op('/'))     # True
+# print(is_op('%'))     # True
+# print(is_op('x'))     # False
+# print(is_op('123'))   # False
+# print(is_op('var'))   # False
+# print(is_op(None))    # False
+
+def skip(tokens, position, expected_token):
+    if position >= len(tokens):
+        syntax_error()
+    if tokens[position] != expected_token:
+        syntax_error()
+    return position + 1
+
+# print( skip(['(', ')'], 0, '(') )   # 1
+# print( skip(['(', ')'], 1, ')') )   # 2
+# 
+# print( skip(['(', ')'], 0, 'a') )   # syntax_error
+# print( skip(['(', ')'], 1, 'b') )   # syntax_error
 
    
 #todo: need to complete function for tests: p1, p2
