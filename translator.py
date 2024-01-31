@@ -255,6 +255,58 @@ def skip(tokens, position, expected_token):
 # print( skip(['(', ')'], 0, 'a') )   # syntax_error
 # print( skip(['(', ')'], 1, 'b') )   # syntax_error
 
+def is_higher_op(new_op, base_op):
+    priority = {'*': 2, '/': 2, '%': 2, '+': 1, '-': 1, '<': 0, '<=': 0, '==': 0, '!=': 0, '>=': 0, '>': 0}
+    return priority.get(new_op, -1) > priority.get(base_op, -1)
+
+# print( is_higher_op('*', '+') )   # true
+# print( is_higher_op('/', '+') )   # true
+# print( is_higher_op('%', '+') )   # true
+# 
+# print( is_higher_op('+', '==') )   # true
+# print( is_higher_op('+', '-') )   # false
+# 
+# print( is_higher_op('+', '<') )   # true
+# print( is_higher_op('+', '<=') )   # true
+# print( is_higher_op('+', '==') )   # true
+# print( is_higher_op('+', '!=') )   # true
+# print( is_higher_op('+', '>=') )   # true
+# print( is_higher_op('+', '>') )   # true
+# 
+# print( is_higher_op('xyz', '>') )   # false
+# print( is_higher_op(None, '>') )   # false
+
+def get_token(tokens, pos):
+    if pos < len(tokens):
+        return tokens[pos]
+    else:
+        return ''
+
+# print( get_token(['a', 'b', 'c'], 0) )  # 'a'
+# print( get_token(['a', 'b', 'c'], 1) )  # 'b'
+# print( get_token(['a', 'b', 'c'], 2) )  # 'c'
+# print( get_token(['a', 'b', 'c'], 3) )  # ''
+
+def arith_opcode(operator):
+    opcodes = {'+': 'add', '-': 'sub', '*': 'mul', '/': 'div', '%': 'mod'}
+    return opcodes.get(operator, '')
+
+# print( arith_opcode("+") )   # "add"
+# print( arith_opcode("-") )   # "sub"
+# print( arith_opcode("*") )   # "mul"
+# print( arith_opcode("/") )   # "div"
+# print( arith_opcode("%") )   # "mod"
+
+def cmp_jump_opcode(operator):
+    opcodes = {'<': 'jb', '<=': 'jbe', '==': 'je', '>=': 'jae', '>': 'ja', '!=': 'jne'}
+    return opcodes.get(operator, '')
+
+# print( cmp_jump_opcode('<') )   # jb
+# print( cmp_jump_opcode('<=') )  # jbe
+# print( cmp_jump_opcode('==') )  # je
+# print( cmp_jump_opcode('>=') )  # jae
+# print( cmp_jump_opcode('>') )   # ja
+# print( cmp_jump_opcode('!=') )  # jne
    
 #todo: need to complete function for tests: p1, p2
 def parse_expression(tokens, pos, program):
