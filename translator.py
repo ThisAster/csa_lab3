@@ -351,7 +351,7 @@ def emit(progam, opcode, arg_type="none", arg=None):
             "arg": arg
         })
 
-def emit_op(progam, op, arg_type="none", arg=None):
+def emit_op(program, op, arg_type="none", arg=None):
     opcode = arith_opcode(op)
     emit(program, opcode, arg_type, arg)
     if is_compare_op(op):
