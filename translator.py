@@ -19,7 +19,6 @@ e[i + 1] = 4
 if (x < 10 and x >= 0 or x == 5 and x != 6) {
     x = x + 1
     y = x + 1
-} else {
 }
 var i 
 i = 0
@@ -29,46 +28,43 @@ while (i < 0) {
 """
 
 """
-letter ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i"
-       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
-       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
-       | "x" | "y" | "z" 
+letter ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | 
+       "h" | "i" | "j" | "k" | "l" | "m" | "n" | 
+       "o" | "p" | "q" | "r" | "s" | "t" | "u" | 
+       "v" | "w" | "x" | "y" | "z" 
 
 digit ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 
 variable_name ::= letter (letter | digit)*
 
-number ::= ( digit ) +
-
-char ::= "'" <any symbol> "'"
+number ::= digit+
 
 string ::= "\"" <any symbol except a double quote>  "\""
 
-array_access ::= variable_name "[" expression "]"        
+string_access ::= variable_name "[" expression "]"        
 
-operator ::= "+" | "-" | "*" | "/" | "%" | "==" | "!=" | "<" | ">" | "<=" | ">=" | "and" | "or"
+operator ::= 
+    "+" | "-" | "*" | "/" | "%" | 
+    "==" | "!=" | "<" | ">" | "<=" | ">=" 
 
 expression ::= 
     number |
-    char |
-    string |
-    array |
     variable_name |
-    array_access |
+    string_access |
     expression operator expression |
     "(" expression ")" |
-    "input" "(" ")" |
-    "print" "(" experession ")"
-    
+    "input" "(" ")" 
+
 statement ::= 
     "var" variable_name |
-    "if" "(" expression ")" "{" ( statement ) * "}" 
-    ( "else" "{" ( statement ) * "}" ) ? |
-    "while" "(" expression ")" "{" ( statement ) * "}" |
+    "if" "(" expression ")" "{" statement* "}" |
+    "while" "(" expression ")" "{" statement* "}" |
     variable_name "=" expression |
-    array_access "=" expression
+    variable_name "=" string | 
+    string_access "=" expression |
+    "print" "(" experession ")"
 
-program ::= ( statement ) +
+program ::= statement*
 """
 # x = (1 + 2) - 3 * 4 / 5
 # 
@@ -202,7 +198,7 @@ def is_name(s):
         return False
     if not isinstance(s, str) or not s.isidentifier() or not s.islower():
         return False
-    keywords = {'var', 'if', 'else', 'while', 'input', 'print'}
+    keywords = {'var', 'if', 'while', 'input', 'print'}
     return s not in keywords    
     
 # print(is_name('π'))  # false
@@ -218,7 +214,10 @@ def is_name(s):
 def is_op(s):
     if not isinstance(s, str):
         return False
-    operators = {'<', '<=', '==', '>=', '>', '!=', '+', '-', '*', '/', '%'}
+    operators = {
+        '<', '<=', '==', '>=', '>', '!=', 
+        '+', '-', '*', '/', '%', '['
+    }
     return s in operators
 
 # print(is_op('<'))     # True
@@ -335,32 +334,39 @@ def alloc_var(program, name, size=4):
 
 def save_acc(program):
     temp_var_address = alloc_temp_var(program)
-    program["instructions"].append({"opcode": "st", "arg_type": "address", "arg": temp_var_address})
+    emit(program, "st", "address", temp_var_address)
     return temp_var_address
 
-def emit(progam, opcode, arg_type="none", arg=None):
+def emit(program, opcode, arg_type="none", arg=None):
     if opcode == "hlt":
         program["instructions"].append({
             "opcode": opcode, 
             "arg_type": arg_type
         })     
+    elif arg is None:
+        program["instructions"].append({
+            "opcode": opcode, 
+            "arg_type": arg_type
+        })        
     else:
         program["instructions"].append({
             "opcode": opcode, 
             "arg_type": arg_type, 
             "arg": arg
         })
+    return len(program["instructions"]) - 1
 
 def emit_op(program, op, arg_type="none", arg=None):
     opcode = arith_opcode(op)
-    emit(program, opcode, arg_type, arg)
+    instruction_addr = emit(program, opcode, arg_type, arg)
     if is_compare_op(op):
-        cmp_addr = len(program['instructions']) - 1
+        # cmp_addr = len(program['instructions']) - 1
         jump_opcode = cmp_jump_opcode(op)
-        emit(program, jump_opcode, "address", cmp_addr + 4)
+        emit(program, jump_opcode, "immediate", instruction_addr + 4)
         emit(program, "ld", "immediate", 0)
-        emit(program, "jmp", "address", cmp_addr + 5)
+        emit(program, "jmp", "immediate", instruction_addr + 5)
         emit(program, "ld", "immediate", 1)
+    return instruction_addr
 
 # emits instruction to join two calculations
 def join_expressions(program, left_addr, op):
@@ -374,9 +380,11 @@ def join_expressions(program, left_addr, op):
     # program["instructions"].append({"opcode": opcode, "arg_type": "address", "arg": right_addr})
 
 def string_to_bytes(s):
-    return [ord(char) for char in s]
+    chars = [ord(char) for char in s]
+    chars.append(0)
+    return chars
 
-# print(string_to_bytes('abc'))
+# print(string_to_bytes('abc'))    # [97, 98, 99,  0]
 
 # 123 x x2
 def is_simple_operand(token):
@@ -384,12 +392,13 @@ def is_simple_operand(token):
     
 def address_of(program, name):
     if name in program["variables"]:
-        return name
+        return program["variables"][name]
     else:
         syntax_error()
     
-#todo:
-#todo: strings
+
+#todo: parens (...)
+#test: parens [...]
 def parse_expression(tokens, pos, program):
     variables = program["variables"]
 
@@ -404,9 +413,20 @@ def parse_expression(tokens, pos, program):
             emit(program, "ld", "immediate", int(token))
         elif is_name(token):
             emit(program, "ld", "address", address_of(program, token))
-    # else:  (todo)
-            
-    pos += 1
+        pos += 1
+    elif token[0] == '"':
+        new_string = token[1:-1]
+        chars = string_to_bytes(new_string)
+        data_addr = program['data_size']
+        for i in range(len(chars)):
+            program['data'][data_addr + i * 4] = chars[i] 
+        emit(program, "ld", "immediate", data_addr)
+        program['data_size'] += len(chars) * 4
+        print(program['data'])
+        print(program['data_size'])
+        pos += 1
+    else:
+        syntax_error()
     
     while is_op(op := get_token(tokens, pos)):
         next_op = get_token(tokens, pos + 2)
@@ -415,77 +435,33 @@ def parse_expression(tokens, pos, program):
             pos = parse_expression(tokens, pos + 1, program)
             join_expressions(program, left_addr, op)
         else:  # the same precedence
-            arg = get_token(tokens, pos + 1)           
-            if is_simple_operand(arg):
-                if arg.isdigit():
-                    emit_op(program, op, "immediate", int(arg))
-                elif is_name(token):
-                    emit_op(program, op, "address", address_of(program, arg))
-            pos += 2
+            if op == '[':
+                pos = skip(tokens, pos, '[')
+                var_addr = save_acc(program)
+                pos = parse_expression(tokens, pos, program)
+                emit(program, "mul", "immediate", 4)        
+                emit(program, "add", "address", var_addr)        
+                emit(program, "ldm")       
+                emit(program, "stm")                        
+                pos = skip(tokens, pos, ']')
+            else:
+                arg = get_token(tokens, pos + 1)           
+                if is_simple_operand(arg):
+                    if arg.isdigit():
+                        emit_op(program, op, "immediate", int(arg))
+                    elif is_name(token):
+                        emit_op(program, op, "address", address_of(program, arg))
+                pos += 2
 
     return pos
 
-
-program = {
-    "instructions": [],
-    "variables": {
-        "a": 0
-    },
-    "data_size": 4
-}
-parse_expression(tokenize("""
-    2 * 2 == 1 - 4
-"""), 0, program)
-i = 0
-for x in program['instructions']:
-    print(i, x)
-    i += 1
-
-# lhs_addr = alloc_temp_var(program)
-# program["instructions"].append({"opcode": "ld", "arg_type": "address", "arg": lhs_addr})
-# print(join_expressions(program, lhs_addr, "+"))
-
-# print( alloc_var(program, 'b') )   # 4
-# print( alloc_var(program, 'c') )   # 8
-# 
-# print(program["variables"])  # {a: 0, b: 4, c: 8}
-# print(program["data_size"])  # 12
-
-# print(alloc_temp_var(program))   # 4
-# print(alloc_temp_var(program))   # 8
-# 
-# print(program["variables"])  # {'a': 0, '4': 4, '8': 8}
-# print(program["data_size"])  # 12
-
-# print( save_acc(program) )   # 4
-#parse_expression(tokenize("x + y"), 0, program)
-# print(program)
-
-#result func parse_expression if use test 'p'
-[
-    {
-        "opcode": "ld",
-        "arg_type": "immediate",
-        "arg": 1
-    },
-    {
-        "opcode": "add",
-        "arg_type": "immediate",
-        "arg": 2    
-    },
-    {
-        "opcode": "sub",
-        "arg_type": "immediate",
-        "arg": 3
-    },
-]
-
 # var +
 # `x =` -
-# if - 
-# while - 
-# `print` -
-# `input` - 
+# `s[i] =` -
+# if +
+# while +
+# `print` -> assembly    out 0
+# `input` -> assembly    in 0
 def parse_statement(tokens, pos, program):
     instructions = program["instructions"]
     variables = program["variables"]
@@ -496,13 +472,91 @@ def parse_statement(tokens, pos, program):
             alloc_var(program, var_name)
             return pos + 2
         else:
-            raise ValueError("Invalid variable name")
-
+            syntax_error()
+    elif token == "if":
+        pos = skip(tokens, pos, 'if')
+        pos = skip(tokens, pos, '(')
+        loop_start_addr = len(program["instructions"]) 
+        pos = parse_expression(tokens, pos, program)
+        emit(program, "cmp", "immediate", 0)
+        jmp_addr = emit(program, "je", "immediate", -1)
+        pos = skip(tokens, pos, ')')
+        pos = skip(tokens, pos, '{')
+        while get_token(tokens, pos) != '}':
+            pos = parse_statement(tokens, pos, program)
+        pos = skip(tokens, pos, '}')
+        loop_end_addr = len(program["instructions"]) 
+        program["instructions"][jmp_addr]['arg'] = loop_end_addr
+        return pos
+    elif token == "while":
+        pos = skip(tokens, pos, 'while')
+        pos = skip(tokens, pos, '(')
+        loop_start_addr = len(program["instructions"]) 
+        pos = parse_expression(tokens, pos, program)
+        emit(program, "cmp", "immediate", 0)
+        jmp_addr = emit(program, "je", "immediate", -1)
+        pos = skip(tokens, pos, ')')
+        pos = skip(tokens, pos, '{')
+        while get_token(tokens, pos) != '}':
+            pos = parse_statement(tokens, pos, program)
+        pos = skip(tokens, pos, '}')
+        emit(program, "jmp", "immediate", loop_start_addr)
+        # fixup forward skip jump address        
+        loop_end_addr = len(program["instructions"])
+        program["instructions"][jmp_addr]['arg'] = loop_end_addr
+        return pos
+    elif token == "print":
+        pos = skip(tokens, pos, 'print')
+        pos = skip(tokens, pos, '(')
+        pos = parse_expression(tokens, pos, program)
+        emit(program, "out", "address", 0)
+        pos = skip(tokens, pos, ')')
+        return pos
+    elif token == "input":
+        pos = skip(tokens, pos, 'input')
+        pos = skip(tokens, pos, '(')
+        emit(program, "in", "address", 0)
+        pos = skip(tokens, pos, ')')
+        return pos
+    elif is_name(token) and get_token(tokens, pos + 1) == "=":  
+        var_name = token
+        var_addr = address_of(program, var_name)
+        pos = parse_expression(tokens, pos + 2, program)
+        emit(program, "st", "address", var_addr)
+        return pos
+    elif is_name(token) and get_token(tokens, pos + 1) == "[":
+        var_name = token
+        var_addr = address_of(program, var_name)
+        pos = parse_expression(tokens, pos + 2, program)
+        index_addr = save_acc(program)
+        pos = skip(tokens, pos, ']')
+        pos = skip(tokens, pos, '=')
+        pos = parse_expression(tokens, pos, program)
+        value_addr = save_acc(program)
+        emit("ld", "address", index_addr)
+        emit("mul", "immediate", 4)        
+        emit("add", "address", var_addr)        
+        emit("ldm")       
+        emit("stm")        
+        return pos
+    print("what?", tokens[pos], get_token(tokens, pos + 1))
+        
+        # print(tokens[pos])
+        
+# Пример использования:
+program_code = """
+    var s
+    var i
+    s = s[i] 
+"""        
+        
 # done            
 def parse_program(tokens):
+    print(tokens)
     program = {
         "instructions": [],
         "variables": {},
+        "data": [0] * 100,
         "data_size": 0
     }
     pos = 0
@@ -510,30 +564,12 @@ def parse_program(tokens):
         pos = parse_statement(tokens, pos, program)
     return program
 
-# Пример использования:
-program_code = """
-    var a
-    var b
-"""
-
+i = 0
 program = parse_program(tokenize(program_code))
+for x in program['instructions']:
+    print(i, x)
+    i += 1
 
-# print(tokenize(program_code))
-# print(program["variables"])  # {'a': 0, 'b': 4} - две новые переменные введены
-
-
-# parse_statement("var b", 0, program)
-# 
-# print(program["variables"])  # {'a': 0, 'b': 4}
-# 
-# def parse_program(tokens):
-#     instructors = []
-#     pos = 0
-#     while pos < len(tokens):
-#         pos = parse_statement(tokens, pos, instructors)
-#     return instructors
-# 
-# print(parse_program(tokenize(p)))
 
 #todo: rewirte to our simplified js 
 def sum_even_fibonacci(limit):
@@ -550,11 +586,95 @@ def sum_even_fibonacci(limit):
     # print(
     return sum_even
 
-def cat():
-    stop_char = '^D'
-    char = input()
-    while (char != stop_char):
-        print(char)
+# Task: Even Fibonacci numbers
+
+
+# var sum_even
+# sum_even = 0
+# var prev
+# prev = 1
+# var current
+# current = 2
+# var limit
+# limit = 4000000
+# 
+# while (current <= limit) {
+#     if (current % 2 == 0) {
+#         sum_even = sum_even + current
+#     }
+#     var temp_var
+#     temp_var = prev
+#     prev = current
+#     current = temp_var + current
+# }
+# 
+# var digit
+# sum_reversed = 0
+# while (sum_even != 0) {
+#     digit = sum_even % 10
+#     sum_reversed = sum_reversed * 10 + digit
+#     sum_even = sum_even / 10
+# }
+# 
+# while (sum_reversed != 0) {
+#     digit = sum_reversed % 10
+#     print(digit)
+#     sum_even = sum_reversed / 10
+# }
+
+
+
+
+    
+
+# Task: cat 
+
+# var stop_char = '^D'
+# var char = input()
+# while (char != stop_char) {
+#     print(char)
+# }
+
+# Task: hello
+
+# var s
+# s = "hello world"
+# while (i < 11) {
+#    print(s[i])
+# }
+
+# Task: hello_user_name
+
+# print("What is your name?")
+# var username
+# username = "____________________________________________________________________________________________________"
+# var n
+# n = 0
+# var i
+# i = 0
+# while (i < 100) {
+#     username[i] = input()
+#     if (username[i] != 0) {
+#         n = n + 1
+#     }
+#     i = i + 1
+# } 
+# i = 0
+# var s
+# s = "Hello, "
+# while (i < 7) {
+#     print(s[i])
+#     i = i + 1 
+# }
+# i = 0
+# while (i < n) {
+#     print(username[i])
+#     i = i + 1
+# }
+# print('!')
+
+
+    
 
 # print(sum_even_fibonacci(4_000_000_000)) # числа 2 и 8 (1, 2, 3, 5, 8)
     
