@@ -589,37 +589,37 @@ def sum_even_fibonacci(limit):
 # Task: Even Fibonacci numbers
 
 
-# var sum_even
-# sum_even = 0
+# var sumeven
+# sumeven = 0
 # var prev
 # prev = 1
 # var current
 # current = 2
 # var limit
 # limit = 4000000
-# 
+# var tempvar
 # while (current <= limit) {
 #     if (current % 2 == 0) {
-#         sum_even = sum_even + current
+#         sumeven = sumeven + current
 #     }
-#     var temp_var
-#     temp_var = prev
+#     tempvar = prev
 #     prev = current
-#     current = temp_var + current
+#     current = tempvar + current
 # }
-# 
+
 # var digit
-# sum_reversed = 0
-# while (sum_even != 0) {
-#     digit = sum_even % 10
-#     sum_reversed = sum_reversed * 10 + digit
-#     sum_even = sum_even / 10
+# var sumreversed
+# sumreversed = 0
+# hile (sumeven != 0) {
+#     digit = sumeven % 10
+#     sumreversed = sumreversed * 10 + digit
+#   sumeven = sumeven / 10
 # }
-# 
-# while (sum_reversed != 0) {
-#     digit = sum_reversed % 10
-#     print(digit)
-#     sum_even = sum_reversed / 10
+
+# while (sumreversed != 0) {
+#     digit = sumreversed % 10
+#     print(48 + digit)
+#     sumreversed = sumreversed / 10
 # }
 
 
@@ -629,49 +629,68 @@ def sum_even_fibonacci(limit):
 
 # Task: cat 
 
-# var stop_char = '^D'
-# var char = input()
-# while (char != stop_char) {
-#     print(char)
+# var stopchar 
+# var char 
+# stopchar = 0
+# char = input()
+# while (char != stopchar) {
+#    print(char)
+#    char = input()
 # }
 
 # Task: hello
 
 # var s
+# var i
+# i = 0
 # s = "hello world"
 # while (i < 11) {
-#    print(s[i])
+#     print(s[i])
+#     i = i + 1
 # }
+# print(0)
 
 # Task: hello_user_name
 
-# print("What is your name?")
+# var i
+# i = 0
+# var greating
+# greating = "What is your name?"
+# while (i < 18) {
+#     print(greating[i])
+#     i = i + 1
+# }
+
 # var username
 # username = "____________________________________________________________________________________________________"
-# var n
+# ar n
 # n = 0
-# var i
 # i = 0
 # while (i < 100) {
 #     username[i] = input()
 #     if (username[i] != 0) {
 #         n = n + 1
 #     }
+#     if (username[i] == 0) {
+#         i = 100
+#     }
 #     i = i + 1
-# } 
-# i = 0
+# }
+
 # var s
 # s = "Hello, "
+# i = 0
 # while (i < 7) {
 #     print(s[i])
-#     i = i + 1 
+#     i = i + 1
 # }
+
 # i = 0
 # while (i < n) {
 #     print(username[i])
 #     i = i + 1
 # }
-# print('!')
+# print(33)
 
 
     
