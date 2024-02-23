@@ -144,15 +144,15 @@ program ::= statement*
 
 ```json
 {
-    'opcode': 'add',
-    'arg_type': 'address',
-    'arg': 5
+    "opcode": "add",
+    "arg_type": "address",
+    "arg": 5
 }
 ```
 где:
-* opcode -- строка с кодом операции;
-* arg_type -- тип аргумента (например, `immediate`, `address`)
-* arg -- аргумент (отсутствует у инструкции `HLT`);
+* `opcode` -- строка с кодом операции;
+* `arg_type` -- тип аргумента (например, `immediate`, `address`)
+* `arg` -- аргумент (отсутствует у инструкции `HLT`);
 
 ## Транслятор
 
@@ -379,8 +379,7 @@ $ cat cat.txt
 foo
 $ python3 translator.py cat.js cat.code cat.data
 LoC: 5, code instructinos: 8
-$ python3 machine.py cat.code cat.data cat
-.txt
+$ python3 machine.py cat.code cat.data cat.txt
 tick #1: PC=0 MPC=1 ACC=0 DA=0 DOUT=None  LD 1
 input=['f', 'o', 'o', '\n'] output=[]
 tick #2: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
