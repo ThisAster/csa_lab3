@@ -1,0 +1,8 @@
+[{"opcode": "ld", "arg_type": "immediate", "arg": 1},
+ {"opcode": "je", "arg_type": "address", "arg": 7},
+ {"opcode": "in", "arg_type": "address", "arg": 0},
+ {"opcode": "st", "arg_type": "address", "arg": 0},
+ {"opcode": "ld", "arg_type": "address", "arg": 0},
+ {"opcode": "out", "arg_type": "address", "arg": 0},
+ {"opcode": "jmp", "arg_type": "address", "arg": 0},
+ {"opcode": "hlt", "arg_type": "none", "arg": 0}]

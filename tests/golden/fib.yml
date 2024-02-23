@@ -1,0 +1,6 @@
+js: fib.js
+code: fib.code
+data: fib.data
+txt: fib.txt
+translator_log: fib-1.log
+machine_log: fib-2.log

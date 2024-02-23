@@ -1,0 +1,149 @@
+tick #1: PC=0 MPC=1 ACC=0 DA=0 DOUT=None  LD 1
+input=['f', 'o', 'o', '\n'] output=[]
+tick #2: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['f', 'o', 'o', '\n'] output=[]
+tick #3: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['f', 'o', 'o', '\n'] output=[]
+tick #4: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['f', 'o', 'o', '\n'] output=[]
+tick #5: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['f', 'o', 'o', '\n'] output=[]
+tick #6: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=[]
+tick #7: PC=3 MPC=0 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #8: PC=3 MPC=9 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #9: PC=3 MPC=10 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #10: PC=4 MPC=0 ACC=102 DA=0 DOUT=None  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #11: PC=4 MPC=7 ACC=102 DA=0 DOUT=None  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #12: PC=4 MPC=8 ACC=102 DA=0 DOUT=102  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #13: PC=5 MPC=0 ACC=102 DA=0 DOUT=None  OUT 0
+input=['o', 'o', '\n'] output=[]
+tick #14: PC=5 MPC=30 ACC=102 DA=0 DOUT=None  OUT 0
+input=['o', 'o', '\n'] output=[]
+tick #15: PC=6 MPC=0 ACC=102 DA=0 DOUT=None  JMP 0
+input=['o', 'o', '\n'] output=['f']
+tick #16: PC=6 MPC=21 ACC=102 DA=0 DOUT=None  JMP 0
+input=['o', 'o', '\n'] output=['f']
+tick #17: PC=0 MPC=0 ACC=102 DA=0 DOUT=None  LD 1
+input=['o', 'o', '\n'] output=['f']
+tick #18: PC=0 MPC=1 ACC=102 DA=0 DOUT=None  LD 1
+input=['o', 'o', '\n'] output=['f']
+tick #19: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', 'o', '\n'] output=['f']
+tick #20: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', 'o', '\n'] output=['f']
+tick #21: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=['f']
+tick #22: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=['f']
+tick #23: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f']
+tick #24: PC=3 MPC=0 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #25: PC=3 MPC=9 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #26: PC=3 MPC=10 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #27: PC=4 MPC=0 ACC=111 DA=0 DOUT=None  LD [0]
+input=['o', '\n'] output=['f']
+tick #28: PC=4 MPC=7 ACC=111 DA=0 DOUT=None  LD [0]
+input=['o', '\n'] output=['f']
+tick #29: PC=4 MPC=8 ACC=111 DA=0 DOUT=111  LD [0]
+input=['o', '\n'] output=['f']
+tick #30: PC=5 MPC=0 ACC=111 DA=0 DOUT=None  OUT 0
+input=['o', '\n'] output=['f']
+tick #31: PC=5 MPC=30 ACC=111 DA=0 DOUT=None  OUT 0
+input=['o', '\n'] output=['f']
+tick #32: PC=6 MPC=0 ACC=111 DA=0 DOUT=None  JMP 0
+input=['o', '\n'] output=['f', 'o']
+tick #33: PC=6 MPC=21 ACC=111 DA=0 DOUT=None  JMP 0
+input=['o', '\n'] output=['f', 'o']
+tick #34: PC=0 MPC=0 ACC=111 DA=0 DOUT=None  LD 1
+input=['o', '\n'] output=['f', 'o']
+tick #35: PC=0 MPC=1 ACC=111 DA=0 DOUT=None  LD 1
+input=['o', '\n'] output=['f', 'o']
+tick #36: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', '\n'] output=['f', 'o']
+tick #37: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', '\n'] output=['f', 'o']
+tick #38: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f', 'o']
+tick #39: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f', 'o']
+tick #40: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o']
+tick #41: PC=3 MPC=0 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #42: PC=3 MPC=9 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #43: PC=3 MPC=10 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #44: PC=4 MPC=0 ACC=111 DA=0 DOUT=None  LD [0]
+input=['\n'] output=['f', 'o']
+tick #45: PC=4 MPC=7 ACC=111 DA=0 DOUT=None  LD [0]
+input=['\n'] output=['f', 'o']
+tick #46: PC=4 MPC=8 ACC=111 DA=0 DOUT=111  LD [0]
+input=['\n'] output=['f', 'o']
+tick #47: PC=5 MPC=0 ACC=111 DA=0 DOUT=None  OUT 0
+input=['\n'] output=['f', 'o']
+tick #48: PC=5 MPC=30 ACC=111 DA=0 DOUT=None  OUT 0
+input=['\n'] output=['f', 'o']
+tick #49: PC=6 MPC=0 ACC=111 DA=0 DOUT=None  JMP 0
+input=['\n'] output=['f', 'o', 'o']
+tick #50: PC=6 MPC=21 ACC=111 DA=0 DOUT=None  JMP 0
+input=['\n'] output=['f', 'o', 'o']
+tick #51: PC=0 MPC=0 ACC=111 DA=0 DOUT=None  LD 1
+input=['\n'] output=['f', 'o', 'o']
+tick #52: PC=0 MPC=1 ACC=111 DA=0 DOUT=None  LD 1
+input=['\n'] output=['f', 'o', 'o']
+tick #53: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['\n'] output=['f', 'o', 'o']
+tick #54: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['\n'] output=['f', 'o', 'o']
+tick #55: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o', 'o']
+tick #56: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o', 'o']
+tick #57: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o']
+tick #58: PC=3 MPC=0 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #59: PC=3 MPC=9 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #60: PC=3 MPC=10 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #61: PC=4 MPC=0 ACC=10 DA=0 DOUT=None  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #62: PC=4 MPC=7 ACC=10 DA=0 DOUT=None  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #63: PC=4 MPC=8 ACC=10 DA=0 DOUT=10  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #64: PC=5 MPC=0 ACC=10 DA=0 DOUT=None  OUT 0
+input=[] output=['f', 'o', 'o']
+tick #65: PC=5 MPC=30 ACC=10 DA=0 DOUT=None  OUT 0
+input=[] output=['f', 'o', 'o']
+tick #66: PC=6 MPC=0 ACC=10 DA=0 DOUT=None  JMP 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #67: PC=6 MPC=21 ACC=10 DA=0 DOUT=None  JMP 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #68: PC=0 MPC=0 ACC=10 DA=0 DOUT=None  LD 1
+input=[] output=['f', 'o', 'o', '\n']
+tick #69: PC=0 MPC=1 ACC=10 DA=0 DOUT=None  LD 1
+input=[] output=['f', 'o', 'o', '\n']
+tick #70: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=[] output=['f', 'o', 'o', '\n']
+tick #71: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=[] output=['f', 'o', 'o', '\n']
+tick #72: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #73: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o', '\n']
+end of input - simulation terminated
+instructions executed: 31, ticks: 73
+output=['f', 'o', 'o', '\n']

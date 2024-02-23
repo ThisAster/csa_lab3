@@ -1,0 +1,6 @@
+js: hello.js
+code: hello.code
+data: hello.data
+txt: hello.txt
+translator_log: hello-1.log
+machine_log: hello-2.log
