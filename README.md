@@ -144,9 +144,9 @@ program ::= statement*
 
 ```json
 {
-    'opcode': 'add',
-    'arg_type': 'address',
-    'arg': 5
+    "opcode": "add",
+    "arg_type": "address",
+    "arg": 5
 }
 ```
 где:
