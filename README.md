@@ -85,9 +85,9 @@ program ::= statement*
 
 Числовые константы не выделяются в памяти данных, потому что они являются частью инструкций загрузки, сложения и т. д. Например, `LD 5` загружает число `5` в `ACC`, при этом само число является частью инструкции. 
 
-Также транслятор может создавать временные числовые переменные при трансляции выражений для сохранения промежуточных результатов, например, при разборе составных математических выражений со скобками. Обращение к данным временным переменным происходит при помощи непосредственой адресации. Временные переменные также выделяются в памяти данных последовательно, по мере необходимости.
+Также транслятор может создавать временные числовые переменные при трансляции выражений для сохранения промежуточных результатов, например, при разборе составных математических выражений со скобками. Обращение к данным временным переменным происходит при помощи прямой адресации. Временные переменные также выделяются в памяти данных последовательно, по мере необходимости.
 
-Строки сохраняются в памяти данных последовательно по мере обнаружения их в программе транслятором. Один символ - одна ячейка. Когда строковые переменные встречаются в программе, транслятор использует их адрес в памяти данных.
+Строки сохраняются в памяти данных последовательно по мере обнаружения их в программе транслятором. Один символ - одна ячейка памяти. Когда строковые переменные встречаются в программе, транслятор использует их адрес в памяти данных.
 
 Программисту доступен один регистр `ACC` (аккумулятор), все вычисления производятся с его участием. Так как регистр всего один, то никакие переменные не отображаются на него.
 
@@ -101,36 +101,38 @@ program ::= statement*
 * Доступ к памяти микро-инструкций осуществляется по адресу, хранимому в специальном регистре `mPC`.
 * Доступ к памяти данных осуществляется по адресу, хранимому в специальном регистре `data_address`.
 * Поток управления: 
- * инкремент mPC после каждой микро-инструкции;
- * инкремент PC после каждой инструкции;
- * условные (je, jne, jg, jl, jge, jle) и безусловный (jmp) переходы
+ * инкремент `mPC` после каждой микро-инструкции;
+ * инкремент `PC` после каждой инструкции;
+ * условные (je, jne, jg, jl, jge, jle) и безусловный (jmp) переходы сбрасывают `PC` на адрес целевой инструкции
 
 ### Набор инструкций 
 
 | Инструкция  | Тип аргумента    | Кол-во тактов  | Пояснение                                          |
 |:------------|------------------|:---------------|:---------------------------------------------------|
-| LD          | immediate        | ???            | Загрузка числа в ACC
-| LD          | address          | ???            | Прямая адресация
-| LD          | indirect_address | ???            | Косвенная адресация
-| ST          | address          | ???            | Сохранение ACC по адресу
-| ST          | indirect_address | ???            | Косвенная адресация
-| ADD         | immediate        | ???            | Прибавить число к ACC
-| ADD         | address          | ???            | Прямая адресация
-| SUB         | immediate        | ???            | Прибавить число к ACC
-| SUB         | address          | ???            | Прямая адресация
-| MUL         | immediate        | ???            | Прибавить число к ACC
-| MUL         | address          | ???            | Прямая адресация
-| DIV         | immediate        | ???            | Прибавить число к ACC
-| DIV         | address          | ???            | Прямая адресация
-| MOD         | immediate        | ???            | Прибавить число к ACC
-| MOD         | address          | ???            | Прямая адресация
-| JMP         | address          | ???            | Безусловный переход
-| JE          | address          | ???            | Переход при равенстве
-| JNE         | address          | ???            | Переход при неравенстве
-| JG          | address          | ???            | Переход, если больше
-| JL          | address          | ???            | Переход, если меньше
-| JGE         | address          | ???            | Переход, если больше или равно
-| JLE         | address          | ???            | Переход, если меньше или равно
+| LD          | immediate        | 2              | Загрузка числа в ACC 
+| LD          | address          | 3              | Прямая адресация
+| LD          | indirect_address | 5              | Косвенная адресация
+| ST          | address          | 3              | Сохранение ACC по адресу
+| ST          | indirect_address | 4              | Косвенная адресация
+| ADD         | immediate        | 2              | Прибавить число к ACC
+| ADD         | address          | 3              | Прямая адресация
+| SUB         | immediate        | 2              | Прибавить число к ACC
+| SUB         | address          | 3              | Прямая адресация
+| MUL         | immediate        | 2              | Прибавить число к ACC
+| MUL         | address          | 3              | Прямая адресация
+| DIV         | immediate        | 2              | Прибавить число к ACC
+| DIV         | address          | 3              | Прямая адресация
+| MOD         | immediate        | 2              | Прибавить число к ACC
+| MOD         | address          | 3              | Прямая адресация
+| JMP         | address          | 2              | Безусловный переход
+| JE          | address          | 2              | Переход при равенстве
+| JNE         | address          | 2              | Переход при неравенстве
+| JG          | address          | 2              | Переход, если больше
+| JL          | address          | 2              | Переход, если меньше
+| JGE         | address          | 2              | Переход, если больше или равно
+| JLE         | address          | 2              | Переход, если меньше или равно
+| IN          | address          | 3              | Ввод из порта   
+| OUT         | address          | 2              | Вывод в порт
 | HLT         | (нет аргумента)  | 2              | Останов
 
 
@@ -157,7 +159,7 @@ program ::= statement*
 Интерфейс командной строки: 
 
 ```
-translator.py <input_file> <output_code> <output_data>
+python3 translator.py <input_file> <output_code> <output_data>
 ```
 
 где
@@ -185,7 +187,7 @@ translator.py <input_file> <output_code> <output_data>
 | ...              | ...             | (тело цикла)         |
 | k                | ...             | ...                  |
 
-Перед генерацией `CMP` генерируется код, вычисляющий значение уловия `if`.
+Перед генерацией `JE` генерируется код, вычисляющий значение условия `if`.
 * Для цикла `while` генерируются инструкция перехода `JE` (прыжок через тело конструкции):
 
 | Номер инструкции | Программа       | Машинный код         |
@@ -206,7 +208,7 @@ translator.py <input_file> <output_code> <output_data>
 Интерфейс командной строки: 
 
 ```
-machine.py <input_code> <input_data> <input_file>
+python3 machine.py <input_code> <input_data> <input_file>
 ```
 
 где
@@ -280,13 +282,277 @@ machine.py <input_code> <input_data> <input_file>
 
 ## Тестирование
 
-В качестве тестов использовано три алгоритма:
+В качестве тестов использовано четыре задачи:
 
 1. hello world -- программа, выводящая "hello world"
 2. cat -- программа cat, повторяем ввод на выводе.
 3. hello user name -- программа, приветствующая пользователя
 4. prob2 -- подсчёт чётных чисел Фибоннаячи до 4000000
 
+Интеграционные тесты реализованы в файле `tests/test_golden.py` с использованием golden-тестов.
 
+CI:
 
+```yaml
+name: CI
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --no-root
+
+      - name: Check code formatting with Ruff
+        run: |
+          poetry run ruff format --check .
+
+      - name: Run Ruff linters
+        run: |
+          poetry run ruff check .
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Run tests
+        run: |
+          poetry run pytest ./tests -v
+```
+
+* Все задачи запускаются на образе ОС `ubuntu-latest`.
+* Устанавливается `Python`
+* Устанавливается менеджер пакетов `poetry`
+* Устанавливаются зависимости:
+    * ruff -- утилита для форматирования и проверки стиля кодирования.
+    * pytest -- утилита для запуска тестов.
+* Запускаются линтер, форматтер и тесты
+
+Пример использования и журнал работы процессора на примере `cat`:
+
+```
+$ cat cat.js
+var char
+while (1) {
+   char = input()
+   print(char)
+}
+$ cat cat.txt
+foo
+$ python3 translator.py cat.js cat.code cat.data
+LoC: 5, code instructinos: 8
+$ python3 machine.py cat.code cat.data cat
+.txt
+tick #1: PC=0 MPC=1 ACC=0 DA=0 DOUT=None  LD 1
+input=['f', 'o', 'o', '\n'] output=[]
+tick #2: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['f', 'o', 'o', '\n'] output=[]
+tick #3: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['f', 'o', 'o', '\n'] output=[]
+tick #4: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['f', 'o', 'o', '\n'] output=[]
+tick #5: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['f', 'o', 'o', '\n'] output=[]
+tick #6: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=[]
+tick #7: PC=3 MPC=0 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #8: PC=3 MPC=9 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #9: PC=3 MPC=10 ACC=102 DA=0 DOUT=None  ST [0]
+input=['o', 'o', '\n'] output=[]
+tick #10: PC=4 MPC=0 ACC=102 DA=0 DOUT=None  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #11: PC=4 MPC=7 ACC=102 DA=0 DOUT=None  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #12: PC=4 MPC=8 ACC=102 DA=0 DOUT=102  LD [0]
+input=['o', 'o', '\n'] output=[]
+tick #13: PC=5 MPC=0 ACC=102 DA=0 DOUT=None  OUT 0
+input=['o', 'o', '\n'] output=[]
+tick #14: PC=5 MPC=30 ACC=102 DA=0 DOUT=None  OUT 0
+input=['o', 'o', '\n'] output=[]
+tick #15: PC=6 MPC=0 ACC=102 DA=0 DOUT=None  JMP 0
+input=['o', 'o', '\n'] output=['f']
+tick #16: PC=6 MPC=21 ACC=102 DA=0 DOUT=None  JMP 0
+input=['o', 'o', '\n'] output=['f']
+tick #17: PC=0 MPC=0 ACC=102 DA=0 DOUT=None  LD 1
+input=['o', 'o', '\n'] output=['f']
+tick #18: PC=0 MPC=1 ACC=102 DA=0 DOUT=None  LD 1
+input=['o', 'o', '\n'] output=['f']
+tick #19: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', 'o', '\n'] output=['f']
+tick #20: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', 'o', '\n'] output=['f']
+tick #21: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=['f']
+tick #22: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', 'o', '\n'] output=['f']
+tick #23: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f']
+tick #24: PC=3 MPC=0 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #25: PC=3 MPC=9 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #26: PC=3 MPC=10 ACC=111 DA=0 DOUT=None  ST [0]
+input=['o', '\n'] output=['f']
+tick #27: PC=4 MPC=0 ACC=111 DA=0 DOUT=None  LD [0]
+input=['o', '\n'] output=['f']
+tick #28: PC=4 MPC=7 ACC=111 DA=0 DOUT=None  LD [0]
+input=['o', '\n'] output=['f']
+tick #29: PC=4 MPC=8 ACC=111 DA=0 DOUT=111  LD [0]
+input=['o', '\n'] output=['f']
+tick #30: PC=5 MPC=0 ACC=111 DA=0 DOUT=None  OUT 0
+input=['o', '\n'] output=['f']
+tick #31: PC=5 MPC=30 ACC=111 DA=0 DOUT=None  OUT 0
+input=['o', '\n'] output=['f']
+tick #32: PC=6 MPC=0 ACC=111 DA=0 DOUT=None  JMP 0
+input=['o', '\n'] output=['f', 'o']
+tick #33: PC=6 MPC=21 ACC=111 DA=0 DOUT=None  JMP 0
+input=['o', '\n'] output=['f', 'o']
+tick #34: PC=0 MPC=0 ACC=111 DA=0 DOUT=None  LD 1
+input=['o', '\n'] output=['f', 'o']
+tick #35: PC=0 MPC=1 ACC=111 DA=0 DOUT=None  LD 1
+input=['o', '\n'] output=['f', 'o']
+tick #36: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', '\n'] output=['f', 'o']
+tick #37: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['o', '\n'] output=['f', 'o']
+tick #38: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f', 'o']
+tick #39: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['o', '\n'] output=['f', 'o']
+tick #40: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o']
+tick #41: PC=3 MPC=0 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #42: PC=3 MPC=9 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #43: PC=3 MPC=10 ACC=111 DA=0 DOUT=None  ST [0]
+input=['\n'] output=['f', 'o']
+tick #44: PC=4 MPC=0 ACC=111 DA=0 DOUT=None  LD [0]
+input=['\n'] output=['f', 'o']
+tick #45: PC=4 MPC=7 ACC=111 DA=0 DOUT=None  LD [0]
+input=['\n'] output=['f', 'o']
+tick #46: PC=4 MPC=8 ACC=111 DA=0 DOUT=111  LD [0]
+input=['\n'] output=['f', 'o']
+tick #47: PC=5 MPC=0 ACC=111 DA=0 DOUT=None  OUT 0
+input=['\n'] output=['f', 'o']
+tick #48: PC=5 MPC=30 ACC=111 DA=0 DOUT=None  OUT 0
+input=['\n'] output=['f', 'o']
+tick #49: PC=6 MPC=0 ACC=111 DA=0 DOUT=None  JMP 0
+input=['\n'] output=['f', 'o', 'o']
+tick #50: PC=6 MPC=21 ACC=111 DA=0 DOUT=None  JMP 0
+input=['\n'] output=['f', 'o', 'o']
+tick #51: PC=0 MPC=0 ACC=111 DA=0 DOUT=None  LD 1
+input=['\n'] output=['f', 'o', 'o']
+tick #52: PC=0 MPC=1 ACC=111 DA=0 DOUT=None  LD 1
+input=['\n'] output=['f', 'o', 'o']
+tick #53: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=['\n'] output=['f', 'o', 'o']
+tick #54: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=['\n'] output=['f', 'o', 'o']
+tick #55: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o', 'o']
+tick #56: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=['\n'] output=['f', 'o', 'o']
+tick #57: PC=2 MPC=29 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o']
+tick #58: PC=3 MPC=0 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #59: PC=3 MPC=9 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #60: PC=3 MPC=10 ACC=10 DA=0 DOUT=None  ST [0]
+input=[] output=['f', 'o', 'o']
+tick #61: PC=4 MPC=0 ACC=10 DA=0 DOUT=None  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #62: PC=4 MPC=7 ACC=10 DA=0 DOUT=None  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #63: PC=4 MPC=8 ACC=10 DA=0 DOUT=10  LD [0]
+input=[] output=['f', 'o', 'o']
+tick #64: PC=5 MPC=0 ACC=10 DA=0 DOUT=None  OUT 0
+input=[] output=['f', 'o', 'o']
+tick #65: PC=5 MPC=30 ACC=10 DA=0 DOUT=None  OUT 0
+input=[] output=['f', 'o', 'o']
+tick #66: PC=6 MPC=0 ACC=10 DA=0 DOUT=None  JMP 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #67: PC=6 MPC=21 ACC=10 DA=0 DOUT=None  JMP 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #68: PC=0 MPC=0 ACC=10 DA=0 DOUT=None  LD 1
+input=[] output=['f', 'o', 'o', '\n']
+tick #69: PC=0 MPC=1 ACC=10 DA=0 DOUT=None  LD 1
+input=[] output=['f', 'o', 'o', '\n']
+tick #70: PC=1 MPC=0 ACC=1 DA=0 DOUT=None  JE 7
+input=[] output=['f', 'o', 'o', '\n']
+tick #71: PC=1 MPC=22 ACC=1 DA=0 DOUT=None  JE 7
+input=[] output=['f', 'o', 'o', '\n']
+tick #72: PC=2 MPC=0 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o', '\n']
+tick #73: PC=2 MPC=28 ACC=1 DA=0 DOUT=None  IN 0
+input=[] output=['f', 'o', 'o', '\n']
+end of input - simulation terminated
+instructions executed: 31, ticks: 73
+output=['f', 'o', 'o', '\n']
+```
+
+Пример проверки исходного кода:
+
+```
+============================= test session starts ==============================
+platform linux -- Python 3.11.8, pytest-7.4.4, pluggy-1.4.0 -- /home/runner/.cache/pypoetry/virtualenvs/test-ci-ZmaL7ir5-py3.11/bin/python
+cachedir: .pytest_cache
+rootdir: /home/runner/work/csa_lab3/csa_lab3
+configfile: pyproject.toml
+plugins: golden-0.2.2
+collecting ... collected 4 items
+
+tests/test_golden.py::test_golden[cat.yaml] PASSED                       [ 25%]
+tests/test_golden.py::test_golden[hello.yaml] PASSED                     [ 50%]
+tests/test_golden.py::test_golden[fib.yaml] PASSED                       [ 75%]
+tests/test_golden.py::test_golden[hello_user.yaml] PASSED                [100%]
+```
+
+```
+| ФИО                         | алг        | LoC | code байт | code инстр. | инстр. | такт. | вариант                                                                        |
+| Абульфатов Руслан Мехтиевич | cat        | 5   | -         | 8           | 31     | 73    | alg | acc | harv | mc | tick | struct | stream | port | cstr | prob2 | [4]char |
+| Абульфатов Руслан Мехтиевич | fib        | 30  | -         | 72          | 888    | 2225  | alg | acc | harv | mc | tick | struct | stream | port | cstr | prob2 | [4]char |
+| Абульфатов Руслан Мехтиевич | hello      | 8   | -         | 23          | 750    | 2008  | alg | acc | harv | mc | tick | struct | stream | port | cstr | prob2 | [4]char |
+| Абульфатов Руслан Мехтиевич | hello_user | 36  | -         | 118         | 187    | 497   | alg | acc | harv | mc | tick | struct | stream | port | cstr | prob2 | [4]char |
+```
