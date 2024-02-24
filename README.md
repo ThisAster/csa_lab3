@@ -220,9 +220,7 @@ python3 machine.py <input_code> <input_data> <input_file>
 
 ### Data Path
 
-************************* СХЕМА DATA PATH *************************
-************************* СХЕМА DATA PATH *************************
-************************* СХЕМА DATA PATH *************************
+![schema](./resources/datapath.jpg)
 
 Реализован в классе DataPath.
 
@@ -259,9 +257,7 @@ python3 machine.py <input_code> <input_data> <input_file>
 
 ### Control Unit
 
-************************* CONTROL UNIT *************************
-************************* CONTROL UNIT *************************
-************************* CONTROL UNIT *************************
+![schema](./resources/controlunit.jpg)
 
 Реализован в классе ControlUnit.
 
