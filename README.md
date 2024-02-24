@@ -114,15 +114,15 @@ program ::= statement*
 | LD          | indirect_address | 5              | Косвенная адресация
 | ST          | address          | 3              | Сохранение ACC по адресу
 | ST          | indirect_address | 4              | Косвенная адресация
-| ADD         | immediate        | 2              | + в ACC
+| ADD         | immediate        | 2              | Прибавить число в ACC
 | ADD         | address          | 3              | Прямая адресация
-| SUB         | immediate        | 2              | - в ACC
+| SUB         | immediate        | 2              | Отнять число от ACC
 | SUB         | address          | 3              | Прямая адресация
-| MUL         | immediate        | 2              | * ACC
+| MUL         | immediate        | 2              | умножения ACC на число
 | MUL         | address          | 3              | Прямая адресация
-| DIV         | immediate        | 2              | / ACC
+| DIV         | immediate        | 2              | целочисленное деление ACC на число
 | DIV         | address          | 3              | Прямая адресация
-| MOD         | immediate        | 2              | % ACC
+| MOD         | immediate        | 2              | деление с остатком ACC на число
 | MOD         | address          | 3              | Прямая адресация
 | JMP         | address          | 2              | Безусловный переход
 | JE          | address          | 2              | Переход при равенстве
