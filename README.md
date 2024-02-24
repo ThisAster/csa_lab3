@@ -114,7 +114,7 @@ program ::= statement*
 | LD          | indirect_address | 5              | Косвенная адресация
 | ST          | address          | 3              | Сохранение ACC по адресу
 | ST          | indirect_address | 4              | Косвенная адресация
-| ADD         | immediate        | 2              | Прибавить число в ACC
+| ADD         | immediate        | 2              | Прибавить число к ACC
 | ADD         | address          | 3              | Прямая адресация
 | SUB         | immediate        | 2              | Отнять число от ACC
 | SUB         | address          | 3              | Прямая адресация
