@@ -118,11 +118,11 @@ program ::= statement*
 | ADD         | address          | 3              | Прямая адресация
 | SUB         | immediate        | 2              | Отнять число от ACC
 | SUB         | address          | 3              | Прямая адресация
-| MUL         | immediate        | 2              | умножения ACC на число
+| MUL         | immediate        | 2              | Умножения ACC на число
 | MUL         | address          | 3              | Прямая адресация
-| DIV         | immediate        | 2              | целочисленное деление ACC на число
+| DIV         | immediate        | 2              | Целочисленное деление ACC на число
 | DIV         | address          | 3              | Прямая адресация
-| MOD         | immediate        | 2              | деление с остатком ACC на число
+| MOD         | immediate        | 2              | Деление с остатком ACC на число
 | MOD         | address          | 3              | Прямая адресация
 | JMP         | address          | 2              | Безусловный переход
 | JE          | address          | 2              | Переход при равенстве
